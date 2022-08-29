@@ -19,34 +19,30 @@ type UserType = {
 export default function App() {
     const {data: users, isLoading, isFetching} = useGetUsers();
     const [statusLoading, setStatusLoading] = useState(false);
-    const {mutateAsync: update} = useStatusUser();
 
     const queryClient = useQueryClient();
 
     async function handleChange(id:number){
         setStatusLoading(true);
 
-        await update(id, {
-            onError: (error) => {
-                console.log(error);
-            },
-            onSuccess: ({data}) => {
-                const prevState:any = queryClient.getQueryData(['users']);
+        const prevState:any = queryClient.getQueryData(['users']);
 
-                const newUsers = prevState.data.map((user:any) => {
-                    if (user.id === data.id) {
-                      return {...user, status: data.status};
-                    }
-                    return user;
-                });
+        console.log('Prev State: ', prevState);
 
-                console.log(newUsers);
-
-                queryClient.setQueryData(['users'], (old:any) => {
-                    console.log(old.data);
-                    return [...old.data, newUsers];
-                });
+        const newUsers = prevState.data.map((user:any) => {
+            if (user.id === id) {
+                return {...user, status: true};
             }
+            return user;
+        });
+
+        console.log('New State: ', newUsers);
+
+        queryClient.setQueryData(['users'], (old:any) => {
+            old.data.map((user: any) => {
+                console.log(user);
+            })
+            return [...old.data, newUsers];
         });
 
         setStatusLoading(false);
