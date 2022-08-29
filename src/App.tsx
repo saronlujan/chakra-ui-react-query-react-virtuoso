@@ -1,11 +1,11 @@
+import { useState } from "react";
 import { Flex, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Spinner, Table, TableCaption, TableContainer, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
 
 import { IoIosArrowDown} from "react-icons/io";
 import Layout from "./layouts/Default";
 
-import { useGetUsers, useStatusUser } from "./services/users";
+import { useGetUsers } from "./services/users";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { FaGlobeAmericas } from "react-icons/fa";
 
 type UserType = {
@@ -18,12 +18,10 @@ type UserType = {
 
 export default function App() {
     const {data: users, isLoading, isFetching} = useGetUsers();
-    const [statusLoading, setStatusLoading] = useState(false);
 
     const queryClient = useQueryClient();
 
     async function handleChange(id:number){
-        setStatusLoading(true);
 
         const prevState:any = queryClient.getQueryData(['users']);
 
@@ -44,8 +42,6 @@ export default function App() {
             })
             return [...old.data, newUsers];
         });
-
-        setStatusLoading(false);
     }
 
     
@@ -80,7 +76,7 @@ export default function App() {
                                     <Td>{user.id}</Td>
                                     <Td>
                                         <Flex color={user.status ? 'teal.500' : 'red.500'} onClick={() => handleChange(user.id)}>
-                                            <Icon as={statusLoading ? Spinner : FaGlobeAmericas} fontSize="20px"/>
+                                            <Icon as={FaGlobeAmericas} fontSize="20px"/>
                                         </Flex>  
                                     </Td>
                                     <Td>{user.name} {user.last_name}</Td>

@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 
 export async function getUsers(){
@@ -10,12 +10,4 @@ export function useGetUsers() {
         staleTime:60 * 1000 * 60 * 24, 
         cacheTime:10
     });
-}
-
-export async function statusUser(id: number){
-    return await api.put(`users/status/${id}`);
-}
-
-export function useStatusUser() {
-    return useMutation((id: number) => statusUser(id));
 }
