@@ -21,28 +21,60 @@ export default function App() {
 
     const queryClient = useQueryClient();
 
+    // async function handleChange(id:number){
+
+    //     const prevState:any = queryClient.getQueryData(['users']);
+
+    //     //console.log('Prev State: ', prevState);
+
+    //     const newUsers = prevState.data.map((user:any) => {
+    //         if (user.id === id) {
+    //             return {...user, status: true};
+    //         }
+    //         return user;
+    //     });
+
+    //     //console.log('New State: ', newUsers);
+
+    //     queryClient.setQueryData(['users'], (old:any) => {
+    //         //console.log(old);
+    //         const newData = {...old, data: [...old.data, newUsers]};
+    //         console.log(newData);
+    //         // old.data.map((user: any) => {
+    //         //     console.log(user);
+    //         // })
+    //         return newData;
+    //     });
+    // }
+
     async function handleChange(id:number){
 
         const prevState:any = queryClient.getQueryData(['users']);
 
-        console.log('Prev State: ', prevState);
-
         const newUsers = prevState.data.map((user:any) => {
             if (user.id === id) {
-                return {...user, status: true};
+                return {...user, status: !user.status};
             }
             return user;
         });
 
-        console.log('New State: ', newUsers);
-
-        queryClient.setQueryData(['users'], (old:any) => {
-            old.data.map((user: any) => {
-                console.log(user);
-            })
-            return [...old.data, newUsers];
+        queryClient.setQueryData(['users'], (prevState:any) => {
+            return {...prevState, data: newUsers};
         });
     }
+
+    // ME
+
+    //     queryClient.setQueryData(['users'], (old:any) => {
+    //         return [...old.data, newUsers];
+    //     });
+
+    // Biel
+
+    //     const newData = {...old, data: [...old.data, newUsers]};
+    //     return newData;
+    
+    // }
 
     
     return (
